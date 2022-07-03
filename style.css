@@ -49,6 +49,7 @@ h1:hover {
   color: var(--color);
   padding: 20px;
   margin: 10px;
+  position: relative;
 }
 
 .item:hover {
@@ -70,9 +71,10 @@ a:is(:hover, :active) {
   text-decoration: underline;
 }
 
-.fa-solid {
-  float: right;
-  cursor: pointer;
+.fa-solid.fa-circle-xmark.original {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 .name {
@@ -110,6 +112,7 @@ a:is(:hover, :active) {
   max-width: 95%;
   width: 500px;
   animation: modalOpen 1s;
+  position: relative;
 }
 
 @keyframes modalOpen {
@@ -122,11 +125,11 @@ a:is(:hover, :active) {
 }
 
 .fa-circle-xmark {
+  position: absolute;
   color: var(--color);
   font-size: 24px;
-  position: relative;
-  top: 13px;
-  right: 13px;
+  top: 5px;
+  right: 5px;
   cursor: pointer;
 }
 
