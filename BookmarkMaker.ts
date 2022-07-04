@@ -11,6 +11,7 @@ class BookmarkMaker {
   public bookmarkForm: HTMLFormElement;
   public bookmarksContainer: HTMLDivElement;
   public deletePost!: HTMLElement;
+  public error: HTMLElement;
   public localArray: LS[] = [];
 
   constructor() {
@@ -25,6 +26,7 @@ class BookmarkMaker {
     this.bookmarksContainer = document.getElementById(
       'bookmarks-container'
     ) as HTMLDivElement;
+    this.error = document.getElementById('error') as HTMLElement;
 
     this.getLocalAndRender();
 
@@ -54,11 +56,26 @@ class BookmarkMaker {
   submitForm(e: Event): void {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
-    const websiteName = (target[0] as HTMLInputElement).value;
-    const websiteURL = (target[1] as HTMLInputElement).value;
-    // *Saving to local storage
-    this.setLocal(websiteName, websiteURL);
-    this.getLocalAndRender();
+    let websiteName = (target[0] as HTMLInputElement).value;
+    let websiteURL = (target[1] as HTMLInputElement).value;
+    //*small-anti xss
+    websiteName = websiteName.replace(/[<>]+/gi, '');
+    //* valid email check
+    if (
+      /^(https?:\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/.test(
+        websiteURL
+      )
+    ) {
+      if (websiteURL.includes('https://') || websiteURL.includes('http://')) {
+        websiteURL = websiteURL.replace(/https?:\/\//gi, '');
+      }
+      this.error.style.display = 'none';
+      // *Saving to local storage
+      this.setLocal(websiteName, websiteURL);
+      this.getLocalAndRender();
+    } else {
+      this.error.style.display = 'inline';
+    }
   }
 
   setLocal(websiteName: string, websiteURL: string): void {
@@ -71,27 +88,34 @@ class BookmarkMaker {
     const locStorData = JSON.parse(
       localStorage.getItem('collection') as string
     );
-    this.localArray = locStorData;
-    this.bookmarksContainer.innerText = '';
 
-    this.localArray.forEach((item: LS): void => {
-      const { websiteName, websiteURL, id } = item;
-      const nodeToAppend = document.createElement('div');
-      nodeToAppend.classList.add('item');
-      nodeToAppend.innerHTML = `
+    if (locStorData) {
+      this.localArray = locStorData;
+      this.bookmarksContainer.innerText = '';
+
+      this.localArray.forEach((item: LS): void => {
+        const { websiteName, websiteURL, id } = item;
+        const nodeToAppend = document.createElement('div');
+        nodeToAppend.classList.add('item');
+        nodeToAppend.innerHTML = `
      <i class="fa-solid fa-circle-xmark original"
       title="delete bookmark"
       id="${id}"></i>
       <div class="name">
-      <img src="favicon.ico" alt="favicon" />
-      <a href="https://${websiteURL}" target="_blank">${websiteName}</a>
+      <img src="https://s2.googleusercontent.com/s2/favicons?domain=${websiteURL}&sz=32" alt="favicon" />
+      <a href="https://${websiteURL}" target="_blank">${
+          websiteName || 'Anonymous'
+        }</a>
       </div> 
       `;
 
-      this.addListener(nodeToAppend);
+        this.addListener(nodeToAppend);
 
-      this.bookmarksContainer.appendChild(nodeToAppend);
-    });
+        this.bookmarksContainer.appendChild(nodeToAppend);
+      });
+    } else {
+      return;
+    }
   }
 
   addListener(node: HTMLDivElement): void {

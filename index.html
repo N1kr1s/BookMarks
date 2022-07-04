@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <link rel="icon" href="favicon.ico" />
     <link
       rel="stylesheet"
@@ -12,6 +11,7 @@
     <link rel="stylesheet" href="style.css" />
     <title>Bookmark</title>
   </head>
+
   <body>
     <h1 id="show-modal">Add Bookmarks</h1>
 
@@ -34,7 +34,8 @@
             </div>
             <!-- ?Website URL -->
             <div class="form-group">
-              <label for="website-url" class="form-label">Website URL</label>
+              <label for="website-url" class="form-label">Website URL</label
+              ><small id="error">Invalid Email</small>
               <input type="text" class="form-input" id="website-url" />
             </div>
             <button>Save</button>
@@ -43,6 +44,6 @@
       </div>
     </div>
 
-    <script src="./script.js"></script>
+    <script src="BookmarkMaker.js"></script>
   </body>
 </html>

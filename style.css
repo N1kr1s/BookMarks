@@ -133,6 +133,11 @@ a:is(:hover, :active) {
   cursor: pointer;
 }
 
+.fa-circle-xmark:hover {
+  transform: scale(1.1);
+  transition: 0.5s ease-in;
+}
+
 .modal-header {
   color: var(--color);
   padding: 15px;
@@ -166,6 +171,12 @@ h3 {
   display: block;
 }
 
+#error {
+  color: red;
+  font-size: smaller;
+  display: none;
+}
+
 button {
   cursor: pointer;
   font-family: inherit;
@@ -174,7 +185,7 @@ button {
   width: 100px;
   border: 2px solid var(--color);
   border-radius: var(--borderRadius);
-  margin-top: 10px;
+  margin-top: 20px;
   box-shadow: var(--shadow);
 }
 
